@@ -1,5 +1,6 @@
 package main.java.chatroom;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -8,16 +9,12 @@ import java.util.Observer;
  * Created by RENT on 2017-08-10.
  */
 public class ChatUser implements Observer{
-    static int counter = 0;
+    private static int counter = 0;
     private int id;
+    private String nick;
+    private List<String> messages = new LinkedList<>();
+    private boolean isAdmin;
 
-    public List<String> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<String> messages) {
-        this.messages = messages;
-    }
 
     public boolean isAdmin() {
         return isAdmin;
@@ -36,9 +33,6 @@ public class ChatUser implements Observer{
         return id;
     }
 
-    private String nick;
-    private List<String> messages;
-    private boolean isAdmin;
 
     public ChatUser(String nick) {
         this.nick = nick;
@@ -47,9 +41,23 @@ public class ChatUser implements Observer{
     }
 
     @Override
+    public String toString() {
+        return " Nick: " + this.nick + " " + this.id;
+    }
+
+    @Override
     public void update(Observable o, Object arg) {
-        if(arg instanceof String){
-            System.out.println("Wiadomość z czatu: " + arg);
+        if(arg instanceof Message) {
+            Message msg = (Message) arg;
+            if (msg.getReciever()==null) {
+                System.out.println(this.getNick() + " otrzymał/ła wiadomość od: " + msg.getSender().getNick());
+                System.out.println("                 - " + msg.getMessage());
+            } else {
+                if(msg.getReciever().getId() == this.id){
+                    System.out.println(this.getNick() + " otrzymał/ła wiadomość od: " + msg.getSender().getNick());
+                    System.out.println("                 - " + msg.getMessage());
+                }
+            }
         }
     }
 }

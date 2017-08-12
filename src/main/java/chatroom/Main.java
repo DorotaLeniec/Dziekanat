@@ -9,6 +9,11 @@ public class Main {
         room.userLogin("Stefan");
         room.userLogin("Bogdan");
         room.userLogin("Aneta");
-        room.sendMessage(1,"bla bla bla");
+        System.out.println("=====================");
+        System.out.println("     "+room.getRoomName());
+        System.out.println("=====================");
+//        room.sendMessageToAllUsers(1,"Hej wszystkim");
+        room.printLoggedUsers();
+        room.sendDirrectMesage(1,"hej Anetka ", 3);
     }
 }

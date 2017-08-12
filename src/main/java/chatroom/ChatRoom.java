@@ -6,9 +6,22 @@ import java.util.*;
  * Created by RENT on 2017-08-10.
  */
 public class ChatRoom extends Observable{
-    String roomName;
-    Map<Integer,ChatUser> loggedUserMap = new HashMap<>();
-    List<String> adminList = new LinkedList<>();
+    private String roomName;
+    private Map<Integer,ChatUser> loggedUserMap = new HashMap<>();
+
+    public Map<Integer, ChatUser> getLoggedUserMap() {
+        return loggedUserMap;
+    }
+
+    public List<String> getAdminList() {
+        return adminList;
+    }
+
+    private List<String> adminList = new LinkedList<>();
+
+    public String getRoomName() {
+        return roomName;
+    }
 
     void userLogin(String nick){
         ChatUser user = new ChatUser(nick);
@@ -31,9 +44,28 @@ public class ChatRoom extends Observable{
         }
     }
 
-    void sendMessage(int userId, String message){
+    void sendMessageToAllUsers(int senderId ,String message){
+        Message msg = new Message(loggedUserMap.get(senderId),message);
         setChanged();
-        notifyObservers(message);
+        notifyObservers(msg);
     }
+
+    void printLoggedUsers(){
+        System.out.println("Zalogowani użytkownicy: ");
+        for (ChatUser chatUser : loggedUserMap.values()) {
+            System.out.println("      Nick: " + chatUser.getNick());
+            System.out.println("           id: " + chatUser.getId());
+        }
+
+    }
+
+    void sendDirrectMesage(int senderId, String message,int reciverId){
+        Message msg = new Message(loggedUserMap.get(senderId),message, loggedUserMap.get(reciverId));
+        setChanged();
+        notifyObservers(msg);
+    }
+
+
+
 
 }
